@@ -1,8 +1,8 @@
 <!--
- * @Author: Harry
+ * @Author: Ryanuo
  * @Date: 2022-07-14 17:19:21
- * @LastEditors: harry
- * @Github: https://github.com/rr210
+ * @LastEditors: ryanuo
+ * @Github: https://github.com/ryanuo
  * @LastEditTime: 2022-07-17 10:16:57
  * @FilePath: \dev\src\views\svg\TextSet.vue
 -->
@@ -95,19 +95,19 @@ svg {
   align-items: center;
   padding-bottom: 10px;
 
-  /deep/.el-color-picker__trigger {
+  :deep(.el-color-picker__trigger) {
     border-radius: 0;
   }
 
-  /deep/.el-input__inner {
+  :deep(.el-input__inner) {
     width: 168px;
     height: 30px;
   }
 
-  /deep/.el-select {
+  :deep(.el-select) {
     margin: 0 !important;
 
-    /deep/.el-input__suffix {
+    :deep(.el-input__suffix) {
       top: 23%;
     }
   }

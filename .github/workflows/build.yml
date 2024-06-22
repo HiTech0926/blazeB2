@@ -1,0 +1,59 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Configure pnpm global bin directory
+        run: |
+          mkdir -p ~/.pnpm-global
+          pnpm config set global-bin-dir ~/.pnpm-global
+
+      - name: Add pnpm global bin to PATH
+        run: echo "$HOME/.pnpm-global" >> $GITHUB_PATH
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Install global dependencies
+        run: pnpm add -g workbox-cli
+
+      - name: Build project
+        run: pnpm run build:vsw
+      
+      - name: Remove old static files
+        run: |
+          rm -rf deploys/vercel-api/api/static
+          rm -rf deploys/other/static
+
+      - name: Copy dist files
+        run: |
+          mkdir -p deploys/vercel-api/api/static
+          mkdir -p deploys/other/static
+          cp -r dist/* deploys/vercel-api/api/static
+          cp -r dist/* deploys/other/static
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.email "1577791638@qq.com"
+          git config --global user.name "ryanuo"
+          git add .
+          git diff-index --quiet HEAD || git commit -m "chore:auto update deploy static files"
+          git push
